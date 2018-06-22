@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+    db:
+        network_mode: bridge
+        image: percona
+        restart: always
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./var/mysql:/var/lib/mysql
+        environment:
+            TZ: Europe/London
+            MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+            MYSQL_DATABASE: nicehash_stats_tracker

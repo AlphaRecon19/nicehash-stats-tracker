@@ -28,7 +28,6 @@ class FetchCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $nicehash = $this->nicehash;
 
         dump($nicehash->getVersion());

@@ -5,8 +5,6 @@ namespace App\Command;
 use App\Entity\Algorithm;
 use App\Repository\AlgorithmRepository;
 
-use Doctrine\ORM\EntityManagerInterface;
-
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,19 +18,13 @@ class ImportAlgorithmsCommand extends Command
     protected static $defaultName = 'app:import-algorithms';
 
     /**
-     * @var \Doctrine\ORM\EntityManagerInterface
-     */
-    private $em;
-
-    /**
      * @var \App\Repository\AlgorithmRepository
      */
     private $algorithmsRepo;
 
-    public function __construct(EntityManagerInterface $em, AlgorithmRepository $algorithmsRepo)
+    public function __construct(AlgorithmRepository $algorithmsRepo)
     {
         parent::__construct();
-        $this->em = $em;
         $this->algorithmsRepo = $algorithmsRepo;
     }
 
@@ -61,12 +53,10 @@ class ImportAlgorithmsCommand extends Command
             $entity->setNicehashId($key)
                 ->setName($algorithm)
             ;
-            $this->em->persist($entity);
+            $this->algorithmsRepo->save($entity);
         }
-        $io->progressFinish();
-        $io->text('Flushing changes to the database');
-        $this->em->flush();
 
-        $io->success('Algorithms count:' . count($algorithms));
+        $io->progressFinish();
+        $io->success('Algorithms count:' . count($this->algorithmsRepo->findAll()));
     }
 }

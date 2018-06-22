@@ -15,6 +15,12 @@ class FetchCommand extends Command
 {
     protected static $defaultName = 'app:fetch';
 
+    public function __construct(Client $nicehash)
+    {
+        parent::__construct();
+        $this->nicehash = $nicehash;
+    }
+
     protected function configure()
     {
         $this->setDescription('');
@@ -22,9 +28,12 @@ class FetchCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $nicehash = new Client();
+
+        $nicehash = $this->nicehash;
 
         dump($nicehash->getVersion());
+        dump($nicehash->getBalance());
         dump($nicehash->getStatsGlobalCurrent());
+        dump($nicehash->getStatsProvider());
     }
 }

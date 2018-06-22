@@ -37,7 +37,15 @@ abstract class AbstractRequest
 
     protected function setUri($uri)
     {
-        $this->uri = $uri;
+        $apiid = $this->client->getRequest()->getApiId();
+        $apikey = $this->client->getRequest()->getApiKey();
+        $address = $this->client->getRequest()->getAddress();
+
+        $this->uri = str_replace(
+            ['{apiid}', '{apikey}', '{address}'],
+            [$apiid, $apikey, $address],
+            $uri
+        );
     }
 
     public function getUri()

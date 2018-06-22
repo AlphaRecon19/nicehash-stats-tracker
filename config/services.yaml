@@ -1,6 +1,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    app.apiid: '%env(apiid)%'
+    app.apikey: '%env(apikey)%'
+    app.address: '%env(address)%'
 
 services:
     # default configuration for services in *this* file
@@ -22,6 +25,18 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+
+    Client\Nicehash\:
+        public: true
+        autowire: true
+        autoconfigure: true
+        resource: '../src/Client/Nicehash/*.php'
+
+    Client\Nicehash\Request:
+        arguments:
+            $apiid: '%app.apiid%'
+            $apikey: '%app.apikey%'
+            $address: '%app.address%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -17,4 +17,18 @@ class UserStatLogRepository extends AbstractRepository
     {
         parent::__construct($registry, UserStatLog::class);
     }
+
+    public function getLatestLogs($mins = 15)
+    {
+        $date = new \DateTime("-{$mins} mins");
+        $query = $this->_em->createQueryBuilder()
+            ->select('usl')
+            ->from('App:UserStatLog', 'usl')
+            ->where('usl.timestamp >= :timestamp')
+            ->setParameter('timestamp', $date)
+            ->getQuery()
+        ;
+
+        return $query->getResult();
+    }
 }

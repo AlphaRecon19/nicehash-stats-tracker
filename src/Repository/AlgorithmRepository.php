@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Repository;
 
@@ -16,5 +17,12 @@ class AlgorithmRepository extends AbstractRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Algorithm::class);
+    }
+
+    public function getAlgoById($id)
+    {
+        $find = $this->findOneBy(['nicehashId' => $id]);
+
+        return $find;
     }
 }

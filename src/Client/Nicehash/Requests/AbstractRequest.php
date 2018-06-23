@@ -1,54 +1,72 @@
 <?php
+declare(strict_types=1);
 
 namespace Client\Nicehash\Requests;
 
+use Client\Nicehash\Client;
 use GuzzleHttp\Psr7\Request;
 
 abstract class AbstractRequest
 {
+    /**
+     * @var \Client\Nicehash\Client
+     */
     private $client;
 
-    private $name;
-
+    /**
+     * Uniform Resource Identifier of this request
+     * @var String
+     */
     private $uri;
 
-    public function __construct($client)
+    /**
+     * @param \Client\Nicehash\Client $client
+     */
+    public function __construct(Client $client)
     {
         $this->client = $client;
         $this->initialize();
     }
 
-    protected function fetchData()
+    /**
+     * Get NiceHash client
+     * @return \Client\Nicehash\Client
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * Make the request to nicehash and return the result
+     * @return array
+     */
+    protected function fetchData(): ?array
     {
         $fetch = $this->client->getRequest()->fetch($this);
 
         return $fetch['result'];
     }
 
-    protected function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
+    /**
+     * Set the URI of the request
+     * @param string $uri
+     */
     protected function setUri($uri)
     {
-        $apiid = $this->client->getRequest()->getApiId();
-        $apikey = $this->client->getRequest()->getApiKey();
-        $address = $this->client->getRequest()->getAddress();
-
+        $request = $this->client->getRequest();
         $this->uri = str_replace(
             ['{apiid}', '{apikey}', '{address}'],
-            [$apiid, $apikey, $address],
+            [$request->getApiId(), $request->getApiKey(), $request->getAddress()],
             $uri
         );
     }
 
-    public function getUri()
+    /**
+     * Get the URI of the request
+     * @param string $uri
+     */
+    public function getUri(): ?string
     {
         return $this->uri;
     }

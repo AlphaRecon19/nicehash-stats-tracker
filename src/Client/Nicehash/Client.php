@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace Client\Nicehash;
 
+use App\Repository\AlgorithmRepository;
 use Client\Nicehash\Requests;
 
 class Client
@@ -11,38 +13,73 @@ class Client
      */
     private $request;
 
-    public function __construct(Request $request)
+    /**
+     * @var \App\Repository\AlgorithmRepository
+     */
+    private $algorithmsRepo;
+
+    public function __construct(Request $request, AlgorithmRepository $algorithmRepo)
     {
         $this->request = $request;
+        $this->algorithmRepo = $algorithmRepo;
     }
 
+    /**
+     * Get $request
+     * @return \Client\Nicehash\Request
+     */
     public function getRequest()
     {
         return $this->request;
     }
 
-    public function getBalance()
+    /**
+     * Get $algorithmRepo
+     * @return \App\Repository\AlgorithmRepository
+     */
+    public function getAlgorithmRepo()
+    {
+        return $this->algorithmRepo;
+    }
+
+    /**
+     * Get current confirmed Bitcoin balance of the contifured wallet
+     * @return array
+     */
+    public function getBalance(): ?array
     {
         $request = new Requests\Prv\Balance($this);
 
         return $request->fetch();
     }
 
-    public function getStatsGlobalCurrent()
+    /**
+     * Get current profitability (price) and hashing speed for all algorithms
+     * @return array
+     */
+    public function getStatsGlobalCurrent(): ?array
     {
         $request = new Requests\Pub\StatsGlobalCurrent($this);
 
         return $request->fetch();
     }
 
-    public function getStatsProvider()
+    /**
+     * Get current stats for provider for all algorithms
+     * @return array
+     */
+    public function getStatsProvider(): ?array
     {
         $request = new Requests\Pub\StatsProvider($this);
 
         return $request->fetch();
     }
 
-    public function getVersion()
+    /**
+     * Get API version
+     * @return string
+     */
+    public function getVersion(): ?string
     {
         $request = new Requests\Pub\Version($this);
 

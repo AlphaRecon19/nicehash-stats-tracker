@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Client\Nicehash\Requests\Prv;
 
@@ -7,12 +8,18 @@ use Client\Nicehash\Requests\RequestableInterface;
 
 class Balance extends AbstractRequest implements RequestableInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function initialize()
     {
         $this->setUri('method=balance&id={apiid}&key={apikey}');
     }
 
-    public function fetch()
+    /**
+     * {@inheritDoc}
+     */
+    public function fetch(): ?array
     {
         $data = $this->fetchData();
 

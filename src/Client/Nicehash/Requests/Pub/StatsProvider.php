@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Client\Nicehash\Requests\Pub;
 
@@ -7,19 +8,30 @@ use Client\Nicehash\Requests\RequestableInterface;
 
 class StatsProvider extends AbstractRequest implements RequestableInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function initialize()
     {
         $this->setUri('method=stats.provider&addr={address}');
     }
 
-    public function fetch()
+    /**
+     * {@inheritDoc}
+     */
+    public function fetch(): ?array
     {
+        $repo = $this->getClient()->getAlgorithmRepo();
         $data = $this->fetchData();
 
-        $stats = $data['stats'];
+        $stats = [];
         $total = (float) 0;
 
-        foreach ($stats as $algo) {
+        foreach ($data['stats'] as $algo) {
+            $algorithm = $repo->getAlgoById($algo['algo']);
+            $algo['algo'] = $algorithm;
+
+            $stats[$algorithm->getName()] = $algo;
             $total += $algo['balance'];
         }
 

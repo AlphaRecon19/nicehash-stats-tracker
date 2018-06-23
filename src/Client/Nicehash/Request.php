@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Client\Nicehash;
 
@@ -28,6 +29,7 @@ class Request
     private $address;
 
     /**
+     * Base URL of the NiceHash API endpoint
      * @var string
      */
     private $baseUrl = 'https://api.nicehash.com';
@@ -46,7 +48,7 @@ class Request
     }
 
     /**
-     * Get guzzle client
+     * Get the Guzzle client
      * @return \GuzzleHttp\Client
      */
     public function getClient()
@@ -65,7 +67,7 @@ class Request
      * Get the configured API key
      * @return string
      */
-    public function getApiKey()
+    public function getApiKey(): ?string
     {
         return $this->apikey;
     }
@@ -74,7 +76,7 @@ class Request
      * Get the configured API id
      * @return string
      */
-    public function getApiId()
+    public function getApiId(): ?string
     {
         return $this->apiid;
     }
@@ -83,15 +85,18 @@ class Request
      * Get the configured Bitcoin address
      * @return string
      */
-    public function getAddress()
+    public function getAddress(): ?string
     {
         return $this->address;
     }
 
-
-    public function fetch($request)
+    /**
+     * Makes a request to NiceHash and then returns the decoded JSON data as an array
+     * @param \Client\NiceHash\AbstractRequest $request
+     * @return array
+     */
+    public function fetch(AbstractRequest $request): ?array
     {
-        dump($request->getUri());
         $response = $this->client->send(
             new GuzzleRequest('GET', "api?{$request->getUri()}")
         );

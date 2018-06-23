@@ -1,8 +1,19 @@
 version: '3.1'
 
 services:
+    app:
+        hostname: nicehash-stats-tracker.app
+        volumes:
+            - ./.env:/var/www/html/.env
+        build:
+            context: ./
+            dockerfile: docker/Dockerfile-app
+        links:
+            - db
+        env_file:
+            - .env
     db:
-        network_mode: bridge
+        hostname: nicehash-stats-tracker.db
         image: percona
         restart: always
         ports:

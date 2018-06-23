@@ -51,7 +51,7 @@ class Request
      * Get the Guzzle client
      * @return \GuzzleHttp\Client
      */
-    public function getClient()
+    public function getClient(): ?Client
     {
         if ($this->client === null) {
             $this->client = new Client([

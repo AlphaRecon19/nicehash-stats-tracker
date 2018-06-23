@@ -16,7 +16,7 @@ class Client
     /**
      * @var \App\Repository\AlgorithmRepository
      */
-    private $algorithmsRepo;
+    private $algorithmRepo;
 
     public function __construct(Request $request, AlgorithmRepository $algorithmRepo)
     {
@@ -28,7 +28,7 @@ class Client
      * Get $request
      * @return \Client\Nicehash\Request
      */
-    public function getRequest()
+    public function getRequest(): ?Request
     {
         return $this->request;
     }
@@ -37,7 +37,7 @@ class Client
      * Get $algorithmRepo
      * @return \App\Repository\AlgorithmRepository
      */
-    public function getAlgorithmRepo()
+    public function getAlgorithmRepo(): ?AlgorithmRepository
     {
         return $this->algorithmRepo;
     }
